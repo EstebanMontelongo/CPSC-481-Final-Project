@@ -31,7 +31,8 @@ def cal_pop_fitness(population):
 # select the N best parents in the mating pool, return then as a list of parents
 def select_best(population, fitness, num_parents=1):
     if len(population) < num_parents:
-        return None
+        print("The number of parents must be smaller or equal to the population size")
+        quit()
 
     parents = []
     temp_fitness = fitness.copy()
@@ -49,17 +50,15 @@ def select_best(population, fitness, num_parents=1):
     return parents
 
 
-# Cross over N parents and create N combination of children, and return the children
-def cross_over(parents):
-    num_parents = len(parents)
+# Cross over two random parents with random combination
+def cross_over(parents, num_offspring):
     children = []
 
-    for i in range(num_parents):
-        child = []
-        # Take a subset of each parents and append to make N children
-        for offset in range(num_parents):
-            split_parent = np.array_split(np.array(parents[(i + offset) % num_parents]), num_parents)
-            child += split_parent[offset].tolist()
+    for i in range(num_offspring):
+        rand_idx1 = np.random.randint(1, len(parents))
+        rand_idx2 = np.random.randint(1, len(parents))
+        c = np.random.randint(1, len(parents[0]))
+        child = parents[rand_idx1][0:c] + parents[rand_idx2][c:]
         children.append(child)
 
     return children
@@ -75,6 +74,58 @@ def mutate(children):
             children[i][rand_idx] = rand_q
     return children
 
+
+def genetic_algorithm():
+    new_population = create_population(POPSIZE, TABLESIZE)
+
+    best_result = -1
+    best_state = []
+
+    for generation in range(NUM_GENERATIONS):
+
+        # Find the fitness for each chromosome in the population
+        fitness = cal_pop_fitness(new_population)
+
+        # Select the best parents in the population for mating
+        parents = select_best(new_population, fitness, NUM_PARENTS)
+
+        # Generate the crossover
+        offspring = cross_over(parents, POPSIZE)
+
+        # Adding variation using random mutation
+        offspring_mutation = mutate(offspring)
+
+        # The best result in the current population
+        curr_state = select_best(new_population, fitness)
+        curr_result = count_safe_queens(curr_state[0])
+        if best_result < curr_result:
+            best_result = curr_result
+            best_state = curr_state[0]
+
+        # Fancy printing of generation number
+        print(make_ordinal(generation + 1) + ' Generation best result is ' + str(max(fitness)))
+        # exit loop if best result is equal to size of board
+        if best_result == TABLESIZE:
+            break
+
+        # Creating new population based on a random number of surviving parents and their offspring
+        number_surviving = np.random.randint(1, len(parents))
+        parents_fitness = cal_pop_fitness(parents)
+        best_parents = select_best(parents, parents_fitness, number_surviving)
+        new_population[0:] = best_parents
+        new_population += offspring_mutation
+        # parents_fitness = cal_pop_fitness(parents)
+        # best_parents = select_best(parents, parents_fitness)
+        # new_population[0:] = best_parents
+        # new_population += offspring_mutation
+
+
+    print("Best solution is state : ", best_state)
+    best_state = remove_attacking_queens(best_state)
+    print_state(best_state)
+    print("Best solution fitness : ", best_result)
+
+
 # This function is used to check if the functions created are working properly
 def debug_genetic_algorithm():
     num_parents = 2
@@ -82,7 +133,7 @@ def debug_genetic_algorithm():
 
     for random_state in new_population:
         print('Random state ' + str(random_state))
-        #print_table(random_state)
+        # print_table(random_state)
 
     fitness = cal_pop_fitness(new_population)
     print('Fitness score of each parent in the population: ' + str(fitness) + '\n')
@@ -92,9 +143,9 @@ def debug_genetic_algorithm():
     print('The best ' + str(num_parents) + ' parents are: \n')
     for parent in parents:
         print(str(parent) + ' With a fitness score of: ' + str(count_safe_queens(parent)))
-        #print_table(parent)
+        # print_table(parent)
 
-    offspring = cross_over(parents)
+    offspring = cross_over(parents, POPSIZE)
 
     print('The crossover creates offspring ' + str(offspring))
     print('With a fitness score of: ' + str(count_safe_queens(offspring)))
@@ -107,43 +158,3 @@ def debug_genetic_algorithm():
         print('The crossover creates child ' + str(offspring))
         print('With a fitness score of: ' + str(count_safe_queens(offspring)))
         print_state(offspring)
-
-
-def genetic_algorithm():
-    new_population = create_population(POPSIZE, TABLESIZE)
-
-    best_result = -1
-    best_state = []
-
-    for generation in range(NUM_GENERATIONS):
-        # Fancy printing of generation number
-        # print(make_ordinal(generation + 1) + ' Generation')
-
-        # Find the fitness for each chromosome in the population
-        fitness = cal_pop_fitness(new_population)
-
-        # Select the best parents in the population for mating
-        parents = select_best(new_population, fitness, NUM_PARENTS)
-
-        # Generate the crossover
-        offspring = cross_over(parents)
-
-        # Adding variation using random mutation
-        offspring_mutation = mutate(offspring)
-
-        # The best result in the current population
-        curr_state = select_best(new_population, fitness)
-        curr_result = count_safe_queens(curr_state[0])
-        if best_result < curr_result:
-            best_result = curr_result
-            best_state = curr_state[0]
-
-        # Creating new population based on the parents and offspring (randomly only add only 1 parent idk why)
-        new_population[0:] = [parents[random.randint(0, len(parents)-1)]]
-        new_population += offspring_mutation
-        # print('Current best result is : ' + str(curr_state[0]) + ' with a score of ' + str(curr_result))
-
-    print("Best solution is state : ", best_state)
-    best_state = remove_attacking_queens(best_state)
-    print_state(best_state)
-    print("Best solution fitness : ", best_result)

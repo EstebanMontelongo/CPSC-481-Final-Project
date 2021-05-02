@@ -28,59 +28,34 @@ def print_state(state):
 def remove_attacking_queens(state):
     state_copy = state.copy()
     for row in range(TABLESIZE):
-        pos = {tuple()}
         col = state[row]
-        # find all squares the current queen attacks
-        pos = find_queen_attack_squares(row, col, pos)
-
-        for row2 in range(TABLESIZE):
+        safe = True
+        for row2 in range(row, TABLESIZE):
             # skip itself, since it can't attack itself
             if row2 == row:
                 continue
             col2 = state[row2]
             # checks is other queens are under attack, if so remove the current queen
-            if (row2, col2) in pos:
+            if col == col2 or abs(row - row2) == abs(col - col2):
                 state_copy[row] = -1
     return state_copy
 
 
-# check if the row/col position is on the board
-def check_range(row, col):
-    return 0 <= row < TABLESIZE and 0 <= col < TABLESIZE
-
-
-# find and return all the row/col positions that the current queen is attacking
-def find_queen_attack_squares(row, col, pos):
-    for row_offset, col_offset in MOVES:
-        new_row = row + row_offset
-        new_col = col + col_offset
-        while check_range(new_row, new_col):
-            pos.add((new_row, new_col))
-            new_row += row_offset
-            new_col += col_offset
-    return pos
-
-
-# count the number of queens that are not being attacked
-# Also known as fitness
+# Check if queen is attacking other queens
 def count_safe_queens(state):
-    safeQueens = 0
+    safe_queens = 0
     for row in range(TABLESIZE):
-        pos = {tuple()}
         col = state[row]
-        # find all squares the current queen attacks
-        pos = find_queen_attack_squares(row, col, pos)
-
         safe = True
-        for row2 in range(TABLESIZE):
+        for row2 in range(row, TABLESIZE):
             # skip itself, since it can't attack itself
             if row2 == row:
                 continue
             col2 = state[row2]
             # checks is other queens are under attack, if so remove the current queen from count
-            if (row2, col2) in pos:
+            if col == col2 or abs(row - row2) == abs(col - col2):
                 safe = False
                 break
         if safe:
-            safeQueens += 1
-    return safeQueens
+            safe_queens += 1
+    return safe_queens
