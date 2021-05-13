@@ -1,11 +1,8 @@
-from constants import *
-
-
 # prints a line of the chess board given the col position
-def print_line(col):
+def print_line(col, table_size):
     line_string = ''
     line_string += '│'
-    for i in range(TABLESIZE):
+    for i in range(table_size):
         if i == col:
             line_string += '♛'
         else:
@@ -18,19 +15,19 @@ def print_line(col):
 
 
 # prints the chess board given the current state
-def print_state(state):
+def print_state(state, table_size):
     for col in state:
-        print_line(col)
+        print_line(col, table_size)
     print('')
 
 
 # removes the queens that are under attack for displaying a solution
-def remove_attacking_queens(state):
+def remove_attacking_queens(state, table_size):
     state_copy = state.copy()
-    for row in range(TABLESIZE):
+    for row in range(table_size):
         col = state[row]
         safe = True
-        for row2 in range(row, TABLESIZE):
+        for row2 in range(row, table_size):
             # skip itself, since it can't attack itself
             if row2 == row:
                 continue
@@ -42,12 +39,12 @@ def remove_attacking_queens(state):
 
 
 # Check if queen is attacking other queens
-def count_safe_queens(state):
+def count_safe_queens(state, table_size):
     safe_queens = 0
-    for row in range(TABLESIZE):
+    for row in range(table_size):
         col = state[row]
         safe = True
-        for row2 in range(row, TABLESIZE):
+        for row2 in range(row, table_size):
             # skip itself, since it can't attack itself
             if row2 == row:
                 continue
