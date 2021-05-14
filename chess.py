@@ -2,6 +2,7 @@ import pygame as p
 
 
 # This code logic I got from this youtube video https://www.youtube.com/watch?v=EnYui0e73Rs
+# queen image from https://www.pngfind.com/download/bJmmbw_chess-queen-png-download-king-crown-icon-png/
 def print_board(state):
     # Initializing game constants
     global WIDTH, HEIGHT, DIMENSIONS, SQ_SIZE, MAX_FPS, IMAGES
