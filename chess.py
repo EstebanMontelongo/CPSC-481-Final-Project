@@ -1,24 +1,75 @@
-# prints a line of the chess board given the col position
-def print_line(col, table_size):
-    line_string = ''
-    line_string += '│'
-    for i in range(table_size):
-        if i == col:
-            line_string += '♛'
-        else:
-            line_string += '  '
-        line_string += '│'
-
-    for i in line_string:
-        print("\u0332" + i, end='')
-    print('')
+import pygame as p
 
 
-# prints the chess board given the current state
-def print_state(state, table_size):
-    for col in state:
-        print_line(col, table_size)
-    print('')
+# This code logic I got from this youtube video https://www.youtube.com/watch?v=EnYui0e73Rs
+def print_board(state):
+    # Initializing game constants
+    global WIDTH, HEIGHT, DIMENSIONS, SQ_SIZE, MAX_FPS, IMAGES
+
+    DIMENSIONS = len(state)
+    WIDTH = HEIGHT = 768
+    SQ_SIZE = HEIGHT // DIMENSIONS
+    MAX_FPS = 15
+    IMAGES = {'bQ': p.transform.scale(p.image.load("images/bQ.png"), (SQ_SIZE, SQ_SIZE))}
+    # Initialize game stuff
+    p.init()
+    screen = p.display.set_mode((WIDTH, HEIGHT))
+    clock = p.time.Clock()
+    screen.fill(p.Color("white"))
+    gs = GameState(state)
+    running = True
+
+    # Loop & draw board until user presses exit
+    while running:
+        for e in p.event.get():
+            if e.type == p.QUIT:
+                running = False
+        draw_game_state(screen, gs)
+        clock.tick(MAX_FPS)
+        p.display.flip()
+
+
+def draw_game_state(screen, gs):
+    # draw squares on the board
+    draw_board(screen, )
+    # draw pieces on the board
+    draw_pieces(screen, gs.board)
+
+
+def draw_board(screen):
+    colors = [p.Color((240, 217, 181)), p.Color((181, 136, 99))]
+
+    for r in range(DIMENSIONS):
+        for c in range(DIMENSIONS):
+            color = colors[((r + c) % 2)]
+            p.draw.rect(screen, color, p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+
+def draw_pieces(screen, board):
+    for r in range(DIMENSIONS):
+        for c in range(DIMENSIONS):
+            piece = board[r][c]
+            if piece != '--':
+                screen.blit(IMAGES[piece], p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+
+class GameState:
+    def __init__(self, state):
+        self.state = state
+        self.board = set_state(self.state)
+
+
+def set_state(state):
+    b_size = len(state)
+    board = [[[] for i in range(b_size)] for i in range(b_size)]
+
+    for row in range(len(board)):
+        for col in range(len(board[0])):
+            if col == state[row]:
+                board[row][col] = 'bQ'
+            else:
+                board[row][col] = '--'
+    return board
 
 
 # removes the queens that are under attack for displaying a solution

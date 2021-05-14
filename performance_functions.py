@@ -35,6 +35,10 @@ def table_size_performance(num_iterations):
     # show the graph
     plt.show()
 
+    plt.clf()
+    plt.cla()
+    plt.close()
+
 
 # Takes the average over N runs as the population size increases and plots the results
 def pop_size_performance(num_iterations):
@@ -67,6 +71,10 @@ def pop_size_performance(num_iterations):
 
     # show the graph
     plt.show()
+
+    plt.clf()
+    plt.cla()
+    plt.close()
 
 
 # Takes the average over N runs as the parent size increases and plots the results
@@ -101,6 +109,10 @@ def parent_size_performance(num_iterations):
     # show the graph
     plt.show()
 
+    plt.clf()
+    plt.cla()
+    plt.close()
+
 
 # Takes the average over N runs as the mutation probability increases and plots the results
 def mutation_prob_performance(num_iterations):
@@ -133,6 +145,10 @@ def mutation_prob_performance(num_iterations):
 
     # show the graph
     plt.show()
+
+    plt.clf()
+    plt.cla()
+    plt.close()
 
 
 # This function is used for the performance evaluation, removed the printing so it doesn't clutter the screen

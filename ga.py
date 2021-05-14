@@ -121,6 +121,6 @@ def genetic_algorithm():
         new_population += offspring_mutation
 
     print("Best solution is state : ", best_state)
-    best_state = remove_attacking_queens(best_state, TABLESIZE)
-    print_state(best_state, TABLESIZE)
     print("Best solution fitness : ", best_result)
+    best_state = remove_attacking_queens(best_state, TABLESIZE)
+    print_board(best_state)

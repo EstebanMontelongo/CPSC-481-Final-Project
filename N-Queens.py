@@ -3,8 +3,8 @@ from performance_functions import performance_evaluation
 
 
 def main():
-    #performance_evaluation()
     genetic_algorithm()
+    # performance_evaluation()
 
 
 if __name__ == '__main__':
