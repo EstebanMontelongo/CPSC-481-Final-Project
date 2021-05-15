@@ -1,4 +1,6 @@
-# from stack overflow https://stackoverflow.com/questions/9647202/ordinal-numbers-replacement
+"""
+from stack overflow https://stackoverflow.com/questions/9647202/ordinal-numbers-replacement
+"""
 
 
 def make_ordinal(value):

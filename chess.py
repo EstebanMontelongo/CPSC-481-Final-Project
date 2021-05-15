@@ -1,8 +1,10 @@
 import pygame as p
 
 
-# This code logic I got from this youtube video https://www.youtube.com/watch?v=EnYui0e73Rs
-# queen image from https://www.pngfind.com/download/bJmmbw_chess-queen-png-download-king-crown-icon-png/
+""" 
+Displaying the chess board I got help from this youtube video: https://www.youtube.com/watch?v=EnYui0e73Rs
+Queen png image from: https://www.pngfind.com/download/bJmmbw_chess-queen-png-download-king-crown-icon-png/
+"""
 def print_board(state):
     # Initializing game constants
     global WIDTH, HEIGHT, DIMENSIONS, SQ_SIZE, MAX_FPS, IMAGES
@@ -28,6 +30,8 @@ def print_board(state):
         draw_game_state(screen, gs)
         clock.tick(MAX_FPS)
         p.display.flip()
+        if not running:
+            p.display.quit()
 
 
 def draw_game_state(screen, gs):

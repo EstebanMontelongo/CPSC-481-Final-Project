@@ -190,9 +190,9 @@ def genetic_algorithm_performance_eval(table_size, pop_size, num_parents, mutate
         new_population[0:] = best_parents
         new_population += offspring_mutation
 
-
-def performance_evaluation():
-    num_iterations = 5
+# Takes as input the number of times to run the program to get a average run time, the higher the more accurate
+# but also the more time it take to run
+def performance_evaluation(num_iterations):
     table_size_performance(num_iterations)
     pop_size_performance(num_iterations)
     parent_size_performance(num_iterations)

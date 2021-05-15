@@ -1,5 +1,8 @@
-# Here you can play with these hyper parameters, to try and get a better solution
-TABLESIZE = 15
+"""
+Here you can play with these hyper parameters, to try and get a better solution
+"""
+
+TABLESIZE = 8
 POPSIZE = 10
 NUM_PARENTS = 2
 NUM_GENERATIONS = 5000

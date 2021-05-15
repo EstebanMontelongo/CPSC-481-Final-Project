@@ -4,7 +4,7 @@ from performance_functions import performance_evaluation
 
 def main():
     genetic_algorithm()
-    # performance_evaluation()
+    performance_evaluation(3)
 
 
 if __name__ == '__main__':
